@@ -5,10 +5,16 @@
   margin: 0;
   font-weight: normal;
 }
+html {
+  background: var(--el-bg-color);
+}
 
 body {
   min-height: 100vh;
   line-height: 1.6;
+  transition:
+    color 0.5s,
+    background-color 0.5s;
   font-family:
     Inter,
     -apple-system,

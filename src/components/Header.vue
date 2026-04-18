@@ -25,4 +25,8 @@ const toggleDark = useToggle(isDark);
   align-items: center;
   border-bottom: 1px solid var(--el-border-color);
 }
+
+.container h1 {
+  color: var(--el-color-primary);
+}
 </style>

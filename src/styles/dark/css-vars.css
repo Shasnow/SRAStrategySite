@@ -1,0 +1,11 @@
+html.dark {
+    --el-bg-color: #0d1117;
+    --el-bg-color-overlay: #1a2035;
+    --el-border-color-light: #7C9EF52E;
+    --el-color-primary: #7c9ef5;
+    --el-color-primary-light-3: #9ab3f7;
+}
+
+html.dark .el-button--primary {
+    --el-button-text-color: #0d1117;
+}

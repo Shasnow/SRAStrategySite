@@ -4,7 +4,7 @@
 
 <template>
   <div>
-    <el-button @click="$emit('upload-btn-click')">上传攻略</el-button>
+    <el-button type="primary" @click="$emit('upload-btn-click')">上传攻略</el-button>
   </div>
 </template>
 
