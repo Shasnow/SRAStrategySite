@@ -1,6 +1,5 @@
 <script setup>
-import {createStrategy, getStrategies, getStrategyDetail} from "@/api/strategy.js";
-import {ElMessage} from "element-plus";
+import {getStrategies, getStrategyDetail} from "@/api/strategy.js";
 import {onMounted, ref} from "vue";
 import Header from "@/components/Header.vue";
 import Aside from "@/components/Aside.vue";
