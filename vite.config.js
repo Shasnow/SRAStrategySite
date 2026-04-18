@@ -28,7 +28,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5035',
+        target: 'https://shasnow.top/s/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

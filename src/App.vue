@@ -2,6 +2,8 @@
 import {createStrategy, getStrategies, getStrategyDetail} from "@/api/strategy.js";
 import {ElMessage} from "element-plus";
 import {onMounted, ref} from "vue";
+import Header from "@/components/Header.vue";
+import Aside from "@/components/Aside.vue";
 
 const strategyMetas = ref([]);
 const strategyDetail = ref({
@@ -114,8 +116,8 @@ onMounted(() => {
 <template>
   <div>
     <el-container>
-      <el-header>
-        <h1>StarRailAssistant 攻略站</h1>
+      <el-header height="fit-content">
+        <Header />
       </el-header>
       <el-container>
         <el-main>
@@ -177,8 +179,8 @@ onMounted(() => {
             </template>
           </el-dialog>
         </el-main>
-        <el-aside>
-          <el-button @click="uploadDialogVisible = true">上传</el-button>
+        <el-aside class="aside">
+          <Aside @upload-btn-click="uploadDialogVisible = true" />
         </el-aside>
       </el-container>
     </el-container>
@@ -186,5 +188,12 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
+.aside {
+  padding: 20px;
+}
+@media (max-width: 768px) {
+  .aside {
+    display: none;
+  }
+}
 </style>
