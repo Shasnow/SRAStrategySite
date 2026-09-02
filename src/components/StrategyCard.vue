@@ -35,7 +35,12 @@ const downloadStrategy = () => {
     <div class="content">
       <h3>{{ meta.title }}</h3>
       <el-text line-clamp="2">{{ meta.description }}</el-text>
-      <el-tag type="info">上次更新：{{ meta.updateTime ? new Date(meta.updateTime * 1000).toLocaleString() : "未更新" }}</el-tag>
+      <div class="tags">
+        <el-tag type="primary">上传者：{{ meta.uploader }}</el-tag>
+        <el-tag type="info">上次更新：{{ meta.updateTime ? new Date(meta.updateTime * 1000).toLocaleString() : "未更新" }}</el-tag>
+        <el-tag type="success" v-if="meta.isPublic">公开</el-tag>
+        <el-tag type="danger" v-else>仅自己可见</el-tag>
+      </div>
     </div>
     <div class="actions">
       <el-tooltip content="详细信息" placement="top">
@@ -67,6 +72,13 @@ const downloadStrategy = () => {
 .actions {
   flex-shrink: 0;
   margin-left: 12px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
 }
 
 .actions button {

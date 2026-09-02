@@ -6,7 +6,8 @@ export interface StrategyMeta {
   title: string
   description: string
   updateTime?: number
-  [key: string]: unknown
+  uploader: string
+  isPublic: boolean
 }
 
 export interface StrategyDetail {
@@ -24,10 +25,27 @@ export interface StrategyDetail {
   [key: string]: unknown
 }
 
+export interface PageResult<T> {
+  records: T[]
+  total: number
+}
+
 export function getStrategies(): Promise<AxiosResponse<StrategyMeta[]>> {
   return request({
-    url: '/strategy/list',
+    url: '/strategy',
     method: 'get',
+  })
+}
+
+export function getStrategiesByUploader(params: {
+  uploader: string
+  page: number
+  pageSize: number
+}): Promise<AxiosResponse<PageResult<StrategyMeta>>> {
+  return request({
+    url: '/strategy/by-uploader',
+    method: 'get',
+    params,
   })
 }
 
@@ -35,8 +53,7 @@ export function getStrategyDetail(
   id: number | string
 ): Promise<AxiosResponse<StrategyDetail>> {
   return request({
-    url: '/strategy/detail',
-    params: { id },
+    url: `/strategy/${id}`,
     method: 'get',
   })
 }
@@ -45,7 +62,7 @@ export function createStrategy(
   data: Record<string, unknown>
 ): Promise<AxiosResponse> {
   return request({
-    url: '/strategy/create',
+    url: '/strategy',
     data,
     method: 'post',
   })

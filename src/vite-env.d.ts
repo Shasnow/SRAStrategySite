@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
     readonly VITE_APP_API_BASE_URL: string
+    readonly VITE_APP_GITHUB_CLIENT_ID: string
     // 更多环境变量...
 }
 

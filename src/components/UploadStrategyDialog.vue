@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { storeToRefs } from "pinia";
 import { ElMessage } from "element-plus";
 import type { UploadFile, UploadRawFile } from "element-plus";
 import { createStrategy } from "@/api/strategy";
+import { useAuthStore } from "@/stores/auth";
+
+const { isAuthenticated, user } = storeToRefs(useAuthStore());
 
 const uploadLoading = ref(false);
 const uploadFileName = ref("");
@@ -35,6 +39,11 @@ const beforeJsonUpload = (file: UploadRawFile) => {
 };
 
 const handleJsonFileChange = async (uploadFile: UploadFile) => {
+  if (!isAuthenticated.value) {
+    ElMessage.error("请先完成 GitHub 登录后再上传");
+    dialogVisible.value = false;
+    return;
+  }
   const file = uploadFile?.raw;
   if (!file) return;
 
@@ -44,6 +53,7 @@ const handleJsonFileChange = async (uploadFile: UploadFile) => {
   try {
     const text = await readFileText(file);
     const parsed = JSON.parse(text) as Record<string, unknown>;
+    parsed.uploader = user.value?.name || user.value?.login || "";
     await createStrategy(parsed);
     ElMessage.success("上传成功");
     dialogVisible.value = false;
