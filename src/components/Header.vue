@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useDark, useToggle } from "@vueuse/core";
 import MoonStars from "@/components/icons/MoonStars.vue";
 import Sun from "@/components/icons/Sun.vue";

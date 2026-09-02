@@ -1,5 +1,6 @@
-<script setup>
-import {getStrategies, getStrategyDetail} from "@/api/strategy.js";
+<script setup lang="ts">
+import {getStrategies, getStrategyDetail} from "@/api/strategy";
+import type {StrategyDetail, StrategyMeta} from "@/api/strategy";
 import {onMounted, ref} from "vue";
 import {ElLoading, ElMessage} from 'element-plus'
 import Header from "@/components/Header.vue";
@@ -8,8 +9,8 @@ import StrategyDetailModel from "@/components/StrategyDetailModel.vue";
 import UploadStrategyDialog from "@/components/UploadStrategyDialog.vue";
 import StrategyCard from "@/components/StrategyCard.vue";
 
-const strategyMetas = ref([]);
-const strategyDetail = ref({
+const strategyMetas = ref<StrategyMeta[]>([]);
+const strategyDetail = ref<StrategyDetail>({
   id: null,
   title: "",
   description: "",
@@ -35,7 +36,7 @@ const loadStrategies = async () => {
   }
 };
 
-const downloadJsonFile = (data, fileName) => {
+const downloadJsonFile = (data: unknown, fileName: string) => {
   const json = JSON.stringify(data, null, 2);
   const blob = new Blob([json], {type: "application/json"});
   const url = URL.createObjectURL(blob);
@@ -46,12 +47,11 @@ const downloadJsonFile = (data, fileName) => {
   URL.revokeObjectURL(url);
 };
 
-const showStrategyDetail = async (id) => {
+const showStrategyDetail = async (id: StrategyMeta["id"]) => {
   const loading = ElLoading.service({text: "Loading"})
   try {
     const res = await getStrategyDetail(id);
-    strategyDetail.value = res.data;
-    strategyDetail.value.id = id;
+    strategyDetail.value = {...res.data, id};
     strategyDetailVisible.value = true;
   } catch (err) {
     console.error("Failed to fetch strategy detail:", err);
@@ -60,7 +60,7 @@ const showStrategyDetail = async (id) => {
   }
 };
 
-const downloadStrategy = async (id) => {
+const downloadStrategy = async (id: StrategyMeta["id"]) => {
   try {
     ElMessage.info("正在下载攻略...");
     const res = await getStrategyDetail(id);

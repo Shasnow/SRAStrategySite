@@ -1,5 +1,7 @@
-<script setup>
-
+<script setup lang="ts">
+defineEmits<{
+  (e: 'upload-btn-click'): void
+}>()
 </script>
 
 <template>

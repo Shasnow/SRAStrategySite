@@ -1,34 +1,40 @@
-<script setup>
-import {computed, ref} from "vue";
-import {ElMessage} from "element-plus";
-import {createStrategy} from "@/api/strategy.js";
+<script setup lang="ts">
+import { computed, ref } from "vue";
+import { ElMessage } from "element-plus";
+import type { UploadFile, UploadRawFile } from "element-plus";
+import { createStrategy } from "@/api/strategy";
 
 const uploadLoading = ref(false);
 const uploadFileName = ref("");
 
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    modelValue?: boolean;
+  }>(),
+  {
+    modelValue: false,
+  }
+);
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits<{
+  (e: "update:modelValue", value: boolean): void;
+}>();
 
 const dialogVisible = computed({
   get: () => props.modelValue,
   set: (value) => emit("update:modelValue", value),
 });
 
-const beforeJsonUpload = (file) => {
-  const isJson = file.type === "application/json" || file.name.toLowerCase().endsWith(".json");
+const beforeJsonUpload = (file: UploadRawFile) => {
+  const isJson =
+    file.type === "application/json" || file.name.toLowerCase().endsWith(".json");
   if (!isJson) {
     ElMessage.error("请上传 JSON 文件");
   }
   return isJson;
 };
 
-const handleJsonFileChange = async (uploadFile) => {
+const handleJsonFileChange = async (uploadFile: UploadFile) => {
   const file = uploadFile?.raw;
   if (!file) return;
 
@@ -37,7 +43,7 @@ const handleJsonFileChange = async (uploadFile) => {
 
   try {
     const text = await readFileText(file);
-    const parsed = JSON.parse(text);
+    const parsed = JSON.parse(text) as Record<string, unknown>;
     await createStrategy(parsed);
     ElMessage.success("上传成功");
     dialogVisible.value = false;
@@ -50,13 +56,13 @@ const handleJsonFileChange = async (uploadFile) => {
   }
 };
 
-const readFileText = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result ?? ""));
-      reader.onerror = () => reject(new Error("读取文件失败"));
-      reader.readAsText(file, "utf-8");
-    });
+const readFileText = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result ?? ""));
+    reader.onerror = () => reject(new Error("读取文件失败"));
+    reader.readAsText(file, "utf-8");
+  });
 
 const closeUploadDialog = () => {
   dialogVisible.value = false;

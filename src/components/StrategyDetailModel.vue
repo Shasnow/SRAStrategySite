@@ -1,18 +1,35 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
+import type { StrategyDetail } from "@/api/strategy";
 
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-  detail: {
-    type: Object,
-    default: () => ({}),
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    modelValue?: boolean;
+    detail?: StrategyDetail;
+  }>(),
+  {
+    modelValue: false,
+    detail: () =>
+      ({
+        id: null,
+        title: "",
+        description: "",
+        author: "",
+        uploader: "",
+        share_code: "",
+        min_coins: 0,
+        min_level: 0,
+        mid_level: 0,
+        on_field: "",
+        off_field: "",
+      }) as StrategyDetail,
+  }
+);
 
-const emit = defineEmits(["update:modelValue", "download"]);
+const emit = defineEmits<{
+  (e: "update:modelValue", value: boolean): void;
+  (e: "download", id: NonNullable<StrategyDetail["id"]>): void;
+}>();
 
 const dialogVisible = computed({
   get: () => props.modelValue,

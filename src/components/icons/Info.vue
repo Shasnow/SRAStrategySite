@@ -1,10 +1,12 @@
-<script setup>
-defineProps({
-  fill: {
-    type: String,
-    default: '#000000'
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    fill?: string;
+  }>(),
+  {
+    fill: '#000000'
   }
-})
+)
 </script>
 
 <template>

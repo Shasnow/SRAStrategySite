@@ -1,15 +1,21 @@
-<script setup>
+<script setup lang="ts">
 import Info from "@/components/icons/Info.vue";
 import Download from "@/components/icons/Download.vue";
+import type { StrategyMeta } from "@/api/strategy";
 
-const props = defineProps({
-  meta: {
-    type: Object,
-    default: () => ({}),
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    meta?: StrategyMeta;
+  }>(),
+  {
+    meta: () => ({} as StrategyMeta),
+  }
+);
 
-const emit = defineEmits(["show-detail", "download"]);
+const emit = defineEmits<{
+  (e: "show-detail", id: StrategyMeta["id"]): void;
+  (e: "download", id: StrategyMeta["id"]): void;
+}>();
 
 const showStrategyDetail = () => {
   if (props.meta?.id == null) return;
@@ -19,7 +25,7 @@ const showStrategyDetail = () => {
 const downloadStrategy = () => {
   if (props.meta?.id == null) return;
   emit("download", props.meta.id);
-}
+};
 
 </script>
 
@@ -29,6 +35,7 @@ const downloadStrategy = () => {
     <div class="content">
       <h3>{{ meta.title }}</h3>
       <el-text line-clamp="2">{{ meta.description }}</el-text>
+      <el-tag type="info">上次更新：{{ meta.updateTime ? new Date(meta.updateTime * 1000).toLocaleString() : "未更新" }}</el-tag>
     </div>
     <div class="actions">
       <el-tooltip content="详细信息" placement="top">
